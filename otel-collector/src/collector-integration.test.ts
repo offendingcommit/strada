@@ -164,7 +164,7 @@ async function hashToken(token: string): Promise<string> {
 }
 
 function extractTable(query: string): string {
-  const match = /INSERT INTO\s+[^.]+\.([A-Za-z0-9_]+)\s+FORMAT JSONEachLine/.exec(
+  const match = /INSERT INTO\s+[^.]+\.([A-Za-z0-9_]+)\s+FORMAT JSONEachRow/.exec(
     query,
   )
   return match?.[1] ?? 'unknown'
@@ -312,6 +312,14 @@ function stripVolatileFields(value: unknown): unknown {
 
   if (typeof value === 'string') {
     return value
+      .replace(
+        /(?:file:\/\/)?\/[^\s"]*\/otel-collector\/src\/collector-integration\.test\.ts/g,
+        '/__repo__/otel-collector/src/collector-integration.test.ts',
+      )
+      .replace(
+        /node:internal\/process\/task_queues:\d+:\d+/g,
+        'node:internal/process/task_queues:0:0',
+      )
       .replace(
         /file:\/\/\/[^\s"]+node_modules\/\.pnpm\/@vitest\+runner@[^/]+\/node_modules\/@vitest\/runner\/dist\/chunk-[^":]+\.js(?::\d+:\d+)?/g,
         'file:///__vitest_runner__/dist/chunk-vitest.js:0:0',
@@ -559,12 +567,12 @@ describe.sequential('collector integration with official OTel SDKs', () => {
 
       expect(queries).toMatchInlineSnapshot(`
         [
-          "INSERT INTO default.otel_errors FORMAT JSONEachLine",
-          "INSERT INTO default.otel_logs FORMAT JSONEachLine",
-          "INSERT INTO default.otel_metrics_gauge FORMAT JSONEachLine",
-          "INSERT INTO default.otel_metrics_histogram FORMAT JSONEachLine",
-          "INSERT INTO default.otel_metrics_sum FORMAT JSONEachLine",
-          "INSERT INTO default.otel_traces FORMAT JSONEachLine",
+          "INSERT INTO default.otel_errors FORMAT JSONEachRow",
+          "INSERT INTO default.otel_logs FORMAT JSONEachRow",
+          "INSERT INTO default.otel_metrics_gauge FORMAT JSONEachRow",
+          "INSERT INTO default.otel_metrics_histogram FORMAT JSONEachRow",
+          "INSERT INTO default.otel_metrics_sum FORMAT JSONEachRow",
+          "INSERT INTO default.otel_traces FORMAT JSONEachRow",
         ]
       `)
 
@@ -615,12 +623,12 @@ describe.sequential('collector integration with official OTel SDKs', () => {
               {
                 "DebugId": "",
                 "Environment": "",
-                "ExceptionFrames": "[{"function":"emitOtelData","filename":"/Users/morse/Documents/GitHub/strada/otel-collector/src/collector-integration.test.ts","lineno": 0,"colno": 0,"in_app":true},{"filename":"/Users/morse/Documents/GitHub/strada/otel-collector/src/collector-integration.test.ts","lineno": 0,"colno": 0,"in_app":true},{"function":"processTicksAndRejections","filename":"node:internal/process/task_queues","lineno":104,"colno":5,"in_app":false},{"filename":"file:///__vitest_runner__/dist/chunk-vitest.js:0:0","lineno": 0,"colno": 0,"in_app":false}]",
+                "ExceptionFrames": "[{"function":"emitOtelData","filename":"/__repo__/otel-collector/src/collector-integration.test.ts","lineno": 0,"colno": 0,"in_app":true},{"filename":"/__repo__/otel-collector/src/collector-integration.test.ts","lineno": 0,"colno": 0,"in_app":true},{"function":"processTicksAndRejections","filename":"node:internal/process/task_queues","lineno":103,"colno":5,"in_app":false},{"filename":"file:///__vitest_runner__/dist/chunk-vitest.js:0:0","lineno": 0,"colno": 0,"in_app":false}]",
                 "ExceptionMessage": "payment declined",
                 "ExceptionStacktrace": "Error: payment declined
-            at emitOtelData (/Users/morse/Documents/GitHub/strada/otel-collector/src/collector-integration.test.ts:0:0)
-            at /Users/morse/Documents/GitHub/strada/otel-collector/src/collector-integration.test.ts:0:0
-            at processTicksAndRejections (node:internal/process/task_queues:104:5)
+            at emitOtelData (/__repo__/otel-collector/src/collector-integration.test.ts:0:0)
+            at /__repo__/otel-collector/src/collector-integration.test.ts:0:0
+            at processTicksAndRejections (node:internal/process/task_queues:0:0)
             at file:///__vitest_runner__/dist/chunk-vitest.js:0:0",
                 "ExceptionType": "Error",
                 "Fingerprint": [
@@ -804,9 +812,9 @@ describe.sequential('collector integration with official OTel SDKs', () => {
                   {
                     "exception.message": "payment declined",
                     "exception.stacktrace": "Error: payment declined
-            at emitOtelData (/Users/morse/Documents/GitHub/strada/otel-collector/src/collector-integration.test.ts:0:0)
-            at /Users/morse/Documents/GitHub/strada/otel-collector/src/collector-integration.test.ts:0:0
-            at processTicksAndRejections (node:internal/process/task_queues:104:5)
+            at emitOtelData (/__repo__/otel-collector/src/collector-integration.test.ts:0:0)
+            at /__repo__/otel-collector/src/collector-integration.test.ts:0:0
+            at processTicksAndRejections (node:internal/process/task_queues:0:0)
             at file:///__vitest_runner__/dist/chunk-vitest.js:0:0",
                     "exception.type": "Error",
                   },

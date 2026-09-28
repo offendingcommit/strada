@@ -7,7 +7,7 @@
 //   Tinybird's `json:$.field` mappings convert snake_case → PascalCase columns.
 //
 // - ClickHouseBackend: Remap keys to PascalCase, then INSERT via ClickHouse
-//   HTTP interface with FORMAT JSONEachLine. Uses signal kind (not physical
+//   HTTP interface with FORMAT JSONEachRow. Uses signal kind (not physical
 //   table name) for mapping lookup, so custom table names work correctly.
 
 import { remapNdjson, type SignalKind } from "./field-mapping.ts";
@@ -95,7 +95,7 @@ export class ClickHouseBackend implements Backend {
     // Uses signal kind (not table name) so custom table names don't break remapping.
     const remapped = remapNdjson(ndjson, signal);
 
-    const query = `INSERT INTO ${this.database}.${table} FORMAT JSONEachLine`;
+    const query = `INSERT INTO ${this.database}.${table} FORMAT JSONEachRow`;
     const endpoint = `${this.url}/?query=${encodeURIComponent(query)}`;
 
     const response = await fetch(endpoint, {
