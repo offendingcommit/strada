@@ -43,5 +43,11 @@ signup closes after the first user exists. Do not expose the bootstrap token to
 the browser. Store the owner password in 1Password. The public login form only
 signs in existing users.
 
-Alert emails use `alerts@d6e.us`; webhook alerts are also supported. Verify
-the Cloudflare Email Sending sender before relying on email alerts.
+Alert emails use `alerts@d6e.us`; webhook alerts are also supported. The
+`d6e.us` sending domain must stay verified in Cloudflare Email Service. Verify
+the destination address before relying on email alerts.
+
+The upstream web dashboard is still a work in progress in this release. Use
+the published `strada@0.9.0` CLI with `STRADA_API_URL=https://strada.d6e.us`
+for issue, log, trace, and metrics queries. `strada database create` is a
+Tinybird setup command, so use the existing ClickHouse configuration instead.

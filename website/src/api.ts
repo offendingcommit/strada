@@ -669,7 +669,7 @@ export const api = new Spiceflow({ tracer })
         return {
           id: proj.id,
           slug: proj.slug,
-        ingestEndpoint: `https://${env.STRADA_INGEST_HOST_SUFFIX}/${proj.id}`,
+          ingestEndpoint: `https://${env.STRADA_INGEST_HOST_SUFFIX}/${proj.id}`,
           token: fullKey,
           retention: retentionResponse(toProjectRetention(proj)),
         }
@@ -687,7 +687,7 @@ export const api = new Spiceflow({ tracer })
         projects: projects.map((p) => ({
           id: p.id,
           slug: p.slug,
-        ingestEndpoint: `https://${env.STRADA_INGEST_HOST_SUFFIX}/${p.id}`,
+          ingestEndpoint: `https://${env.STRADA_INGEST_HOST_SUFFIX}/${p.id}`,
           createdAt: p.createdAt,
           retention: retentionResponse(toProjectRetention(p)),
         })),

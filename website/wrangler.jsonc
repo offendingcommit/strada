@@ -15,7 +15,7 @@
     "crons": ["*/5 * * * *"],
   },
   "send_email": [
-    { "name": "EMAIL", "remote": true },
+    { "name": "EMAIL", "remote": true, "allowed_sender_addresses": ["alerts@d6e.us"] },
   ],
   "ai": {
     "binding": "AI",
@@ -74,7 +74,7 @@
         "crons": ["*/5 * * * *"],
       },
       "send_email": [
-        { "name": "EMAIL" },
+        { "name": "EMAIL", "allowed_sender_addresses": ["alerts@d6e.us"] },
       ],
       "vars": {
         "STRADA_PROJECT_ID": "",
