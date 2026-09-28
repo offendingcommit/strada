@@ -669,7 +669,7 @@ export const api = new Spiceflow({ tracer })
         return {
           id: proj.id,
           slug: proj.slug,
-          ingestEndpoint: `https://${proj.id}-ingest.strada.sh`,
+        ingestEndpoint: `https://${env.STRADA_INGEST_HOST_SUFFIX}/${proj.id}`,
           token: fullKey,
           retention: retentionResponse(toProjectRetention(proj)),
         }
@@ -687,7 +687,7 @@ export const api = new Spiceflow({ tracer })
         projects: projects.map((p) => ({
           id: p.id,
           slug: p.slug,
-          ingestEndpoint: `https://${p.id}-ingest.strada.sh`,
+        ingestEndpoint: `https://${env.STRADA_INGEST_HOST_SUFFIX}/${p.id}`,
           createdAt: p.createdAt,
           retention: retentionResponse(toProjectRetention(p)),
         })),
@@ -1514,7 +1514,7 @@ export const api = new Spiceflow({ tracer })
             if (dest.channel === 'email') {
               const html = await buildTestAlertEmailHtml(orgName)
               await env.EMAIL.send({
-                from: { email: 'alerts@updates.strada.sh', name: 'Strada' },
+                from: { email: 'alerts@d6e.us', name: 'Strada' },
                 to: dest.destination,
                 subject: '[Strada] Test alert',
                 html,

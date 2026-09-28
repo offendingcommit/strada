@@ -2,10 +2,7 @@
 // Invert + hue-rotate + blend in light. Poster shows while the mp4 loads.
 'use client'
 
-import { useState } from 'react'
 import { Button } from './ui/button.tsx'
-import { authClient } from '../auth-client.ts'
-import { GoogleIcon } from './login-button.tsx'
 
 const TOP_GRADIENT = [
   'linear-gradient(to bottom,',
@@ -39,20 +36,6 @@ function GitHubIcon(props: React.ComponentProps<'svg'>) {
 }
 
 export function HeroSection() {
-  const [loading, setLoading] = useState(false)
-
-  async function handleSignUp() {
-    setLoading(true)
-    try {
-      await authClient.signIn.social({
-        provider: 'google',
-        callbackURL: '/wip',
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
     <div className='relative mt-4 lg:mt-8 mb-6 lg:mb-10 w-screen ml-[calc(-50vw+50%)] flex flex-col items-center overflow-hidden bg-background'>
       <video
@@ -83,9 +66,8 @@ export function HeroSection() {
         </h1>
 
         <div className='flex gap-3 flex-wrap justify-center'>
-          <Button size='lg' className='gap-2.5' loading={loading} onClick={handleSignUp}>
-            <GoogleIcon data-icon='inline-start' />
-            Sign up with Google
+          <Button size='lg' className='gap-2.5' render={<a href='/login' />}>
+            Sign in
           </Button>
           <Button
             variant='ghost'

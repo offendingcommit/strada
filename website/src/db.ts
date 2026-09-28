@@ -3,13 +3,14 @@
 // getDb() creates a drizzle-orm/sqlite-proxy client bound to env.DB.
 // Uses sqlite-proxy instead of drizzle-orm/d1 to avoid the batch findFirst
 // crash (drizzle-team/drizzle-orm#2721).
-// getAuth() creates a BetterAuth instance with Google social login + device flow.
+// getAuth() creates a BetterAuth instance with local login + device flow.
 
 import { env } from 'cloudflare:workers'
 import { drizzle } from 'drizzle-orm/sqlite-proxy'
 import * as orm from 'drizzle-orm'
 import * as schema from 'db/src/schema.ts'
 import { betterAuth } from 'better-auth/minimal'
+import { APIError, createAuthMiddleware } from 'better-auth/api'
 import { deviceAuthorization, bearer, jwt } from 'better-auth/plugins'
 import { mcp } from '@better-auth/mcp'
 import { cimd } from '@better-auth/cimd'
@@ -124,12 +125,24 @@ export function getAuth() {
         maxAge: 5 * 60,
       },
     },
-    socialProviders: {
-      google: {
-        clientId: env.GOOGLE_CLIENT_ID,
-        clientSecret: env.GOOGLE_CLIENT_SECRET,
-        prompt: 'select_account',
-      },
+    emailAndPassword: {
+      enabled: true,
+      minPasswordLength: 16,
+    },
+    hooks: {
+      before: createAuthMiddleware(async (ctx) => {
+        if (ctx.path !== '/sign-up/email') return
+        const token = env.STRADA_BOOTSTRAP_TOKEN
+        const email = String(ctx.body?.email ?? '').toLowerCase()
+        if (!token || ctx.headers?.get('x-strada-bootstrap-token') !== token ||
+            email !== env.STRADA_ADMIN_EMAIL.toLowerCase()) {
+          throw new APIError('FORBIDDEN', { message: 'Enrollment is closed' })
+        }
+        const existing = await env.DB.prepare('SELECT COUNT(*) AS count FROM user').first<{ count: number }>()
+        if (Number(existing?.count ?? 0) !== 0) {
+          throw new APIError('FORBIDDEN', { message: 'Enrollment is closed' })
+        }
+      }),
     },
     advanced: {
       database: {
