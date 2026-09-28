@@ -1,11 +1,13 @@
 packages:
   - ./*
 
-onlyBuiltDependencies:
-  - esbuild
-  - protobufjs
-  - sharp
-  - workerd
+allowBuilds:
+  '@parcel/watcher': true
+  better-sqlite3: true
+  esbuild: true
+  opencode-ai: false
+  protobufjs: true
+  sharp: true
+  workerd: true
 overrides:
-  termcast: file:../termcast/termcast
-  "@termcast/utils": file:../termcast/raycast-utils
+  spiceflow: 1.26.0-rsc.18

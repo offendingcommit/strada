@@ -9,7 +9,7 @@ converted to ts from https://github.com/open-telemetry/opentelemetry-collector-c
 Two storage backends, selected by environment variables at deploy time:
 
 - **Tinybird**: set `TINYBIRD_ENDPOINT` + `TINYBIRD_TOKEN`. Sends snake_case NDJSON to Tinybird Events API. Tinybird's `json:$.field` mappings handle conversion to PascalCase columns.
-- **ClickHouse**: set `CLICKHOUSE_URL` (+ `CLICKHOUSE_DATABASE`, `CLICKHOUSE_USER`, `CLICKHOUSE_PASSWORD`). Remaps NDJSON keys to PascalCase via `field-mapping.ts`, then sends via `INSERT INTO table FORMAT JSONEachLine`.
+- **ClickHouse**: set `CLICKHOUSE_URL` (+ `CLICKHOUSE_DATABASE`, `CLICKHOUSE_USER`, `CLICKHOUSE_PASSWORD`). Remaps NDJSON keys to PascalCase via `field-mapping.ts`, then sends via `INSERT INTO table FORMAT JSONEachRow`.
 
 The backend factory is in `backend.ts`. Only one backend should be configured per deployment.
 

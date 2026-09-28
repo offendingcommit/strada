@@ -5,7 +5,10 @@
 // No match: ingest.strada.sh, localhost → "" (empty string)
 
 export function getProjectId(request: { url: string }): string {
-  const hostname = new URL(request.url).hostname;
+  const url = new URL(request.url);
+  const pathProjectId = url.searchParams.get("project_id");
+  if (pathProjectId) return pathProjectId.toUpperCase();
+  const hostname = url.hostname;
   const match = hostname.match(/^(.+)-ingest\./);
   if (match) return (match[1] ?? "").toUpperCase();
   return "";

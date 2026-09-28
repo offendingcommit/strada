@@ -110,7 +110,7 @@ async function sendEmail(to: string, subject: string, html: string): Promise<boo
   try {
     logger.info({ message: 'sending alert email', to, subject })
     await env.EMAIL.send({
-      from: { email: 'alerts@updates.strada.sh', name: 'Strada' },
+      from: { email: 'alerts@d6e.us', name: 'Strada' },
       to,
       subject,
       html,

@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "strada-website",
+  "name": "minilab-strada-website",
   "compatibility_date": "2026-04-14",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "main": "spiceflow/cloudflare-entrypoint",
@@ -15,7 +15,7 @@
     "crons": ["*/5 * * * *"],
   },
   "send_email": [
-    { "name": "EMAIL", "remote": true },
+    { "name": "EMAIL", "remote": true, "allowed_sender_addresses": ["alerts@d6e.us"] },
   ],
   "ai": {
     "binding": "AI",
@@ -28,34 +28,35 @@
     },
   ],
   "vars": {
-    "STRADA_PROJECT_ID": "01KS5334MX8A0S99YXK8MD7ZVJ"
+    "STRADA_PROJECT_ID": "",
+    "STRADA_ADMIN_EMAIL": "admin@strada.d6e.us",
+    "STRADA_INGEST_HOST_SUFFIX": "ingest.d6e.us",
+    "BETTER_AUTH_URL": "https://strada.d6e.us",
+    "STRADA_TOKEN": ""
   },
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "strada-db",
-      "database_id": "696d53b4-bce6-4ef0-89dd-aba145a03d12",
+      "database_name": "strada-minilab",
+      "database_id": "efe0a376-b60e-4cdd-8594-fbfaa96b6f3e",
       "migrations_dir": "../db/drizzle",
     },
   ],
   "secrets": {
     "required": [
       "BETTER_AUTH_SECRET",
-      "BETTER_AUTH_URL",
-      "GOOGLE_CLIENT_ID",
-      "GOOGLE_CLIENT_SECRET",
-      "STRADA_TOKEN",
+      "STRADA_BOOTSTRAP_TOKEN",
     ],
   },
   "routes": [
     {
-      "pattern": "strada.sh",
+      "pattern": "strada.d6e.us",
       "custom_domain": true,
     },
   ],
   "env": {
     "preview": {
-      "name": "strada-website-preview",
+      "name": "minilab-strada-website-preview",
       "ai": {
         "binding": "AI",
       },
@@ -73,33 +74,34 @@
         "crons": ["*/5 * * * *"],
       },
       "send_email": [
-        { "name": "EMAIL" },
+        { "name": "EMAIL", "allowed_sender_addresses": ["alerts@d6e.us"] },
       ],
       "vars": {
-        "STRADA_PROJECT_ID": "01KS5334MX8A0S99YXK8MD7ZVJ"
+        "STRADA_PROJECT_ID": "",
+        "STRADA_ADMIN_EMAIL": "admin@strada.d6e.us",
+        "STRADA_INGEST_HOST_SUFFIX": "ingest-preview.d6e.us",
+        "BETTER_AUTH_URL": "https://strada-preview.d6e.us",
+        "STRADA_TOKEN": ""
       },
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "strada-preview-db",
-          "database_id": "1e220c20-0396-4623-a62f-c2006a262d78",
+          "database_name": "strada-minilab-preview",
+          "database_id": "27998c96-5a4b-433e-817e-20eedb863380",
           "migrations_dir": "../db/drizzle",
         },
       ],
       "secrets": {
         "required": [
           "BETTER_AUTH_SECRET",
-          "BETTER_AUTH_URL",
-          "GOOGLE_CLIENT_ID",
-          "GOOGLE_CLIENT_SECRET",
-          "STRADA_TOKEN",
+          "STRADA_BOOTSTRAP_TOKEN",
         ],
       },
       "routes": [
         {
-          "pattern": "preview.strada.sh",
+          "pattern": "strada-preview.d6e.us",
           "custom_domain": true,
-          "zone_name": "strada.sh",
+          "zone_name": "d6e.us",
         },
       ],
     },

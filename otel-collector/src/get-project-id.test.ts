@@ -2,6 +2,10 @@ import { describe, it, expect } from "vitest";
 import { getProjectId } from "./get-project-id.ts";
 
 describe("getProjectId", () => {
+  it("reads the project ID from a normalized path endpoint", () => {
+    const req = new Request("https://ingest.d6e.us/v1/traces?project_id=01kpvgtt9cjw4znef414vhgrfd");
+    expect(getProjectId(req)).toBe("01KPVGTT9CJW4ZNEF414VHGRFD");
+  });
   it("normalizes ULID project ids to uppercase", () => {
     const req = new Request("https://01kpvgtt9cjw4znef414vhgrfd-ingest.strada.sh/v1/traces");
     expect(getProjectId(req)).toBe("01KPVGTT9CJW4ZNEF414VHGRFD");
