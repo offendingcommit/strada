@@ -26,6 +26,7 @@ interface CapturedInsert {
   query: string
   table: string
   rows: Record<string, unknown>[]
+  dateTimeInputFormat?: string | null
 }
 
 interface StartedServer {
@@ -491,6 +492,7 @@ describe.sequential('collector integration with official OTel SDKs', () => {
           query,
           table: extractTable(query),
           rows,
+          dateTimeInputFormat: url.searchParams.get('date_time_input_format'),
         })
 
         await writeFile(outputFile, JSON.stringify({ inserts }, null, 2), 'utf8')
@@ -560,6 +562,7 @@ describe.sequential('collector integration with official OTel SDKs', () => {
       const parsed = JSON.parse(fileText) as { inserts: CapturedInsert[] }
 
       expect(Array.isArray(parsed.inserts)).toBe(true)
+      expect(parsed.inserts.every((insert) => insert.dateTimeInputFormat === 'best_effort')).toBe(true)
 
       const queries = [...new Set(parsed.inserts.map((insert) => insert.query))]
         .filter((query) => query.length > 0)

@@ -96,7 +96,7 @@ export class ClickHouseBackend implements Backend {
     const remapped = remapNdjson(ndjson, signal);
 
     const query = `INSERT INTO ${this.database}.${table} FORMAT JSONEachRow`;
-    const endpoint = `${this.url}/?query=${encodeURIComponent(query)}`;
+    const endpoint = `${this.url}/?date_time_input_format=best_effort&query=${encodeURIComponent(query)}`;
 
     const response = await fetch(endpoint, {
       method: "POST",
